@@ -11,6 +11,12 @@ trait ICRUDMechanics<T> {
     fn add_behaviour(ref self: T, id: felt252, call: (ContractAddress, felt252));
 }
 
+#[starknet::interface]
+trait IEngine<T> {
+    fn iterate(ref self: T, blocks: Array<Block>);
+    fn iterate_get(self: @T, blocks: Array<Block>) -> Array<Block>;
+}
+
 #[dojo::contract]
 pub mod actions {
     use super::{IActions, Direction, Position, next_position};
@@ -24,7 +30,7 @@ pub mod actions {
         /// Use the default namespace "dojo_starter". This function is handy since the ByteArray
         /// can't be const.
         fn world_default(self: @ContractState) -> dojo::world::WorldStorage {
-            self.world(@"dojo_starter")
+            self.world(@"dojo_starter");
         }
     }
 }
